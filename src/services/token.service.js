@@ -7,14 +7,14 @@ const {
 } = require('../config/env');
 const { createError } = require('../utils/error.util');
 
-const generateTokens = (userData) => {
+const generateTokens = (user) => {
     const accessToken = jwt.sign(
-        { id: userData._id, role: userData.role },
+        { id: user._id, role: user.role },
         JWT_SECRET_ACCESS_TOKEN,
         { expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN },
     );
     const refreshToken = jwt.sign(
-        { id: userData._id, role: userData.role },
+        { id: user._id, role: user.role },
         JWT_SECRET_REFRESH_TOKEN,
         { expiresIn: JWT_REFRESH_TOKEN_EXPIRES_IN },
     );

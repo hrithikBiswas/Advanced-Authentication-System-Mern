@@ -1,7 +1,7 @@
-const TOken = require('../models/token.model');
+const Token = require('../models/token.model');
 
 const createToken = async (userId, refreshToken) => {
-    const token = new TOken({
+    const token = new Token({
         user: userId,
         token: refreshToken,
     });
@@ -9,6 +9,11 @@ const createToken = async (userId, refreshToken) => {
     return token;
 };
 
+const deleteTokenByUserId = async (userId) => {
+    return await Token.deleteOne({ user: userId });
+};
+
 module.exports = {
     createToken,
+    deleteTokenByUserId,
 };

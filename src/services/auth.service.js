@@ -4,7 +4,7 @@ const userRepository = require('../repositories/user.repository');
 const tokenService = require('./token.service');
 const tokenRepository = require('../repositories/token.repository');
 
-const registerService = async (username, email, password) => {
+const register = async (username, email, password) => {
     if (!username || !email || !password) {
         throw createError('All fields are required', 400);
     }
@@ -36,6 +36,33 @@ const registerService = async (username, email, password) => {
     return { newUser, accessToken, refreshToken };
 };
 
+const login = async (email, password) => {
+    if (!email || !password) {
+        throw createError('All fields are required.', 400);
+    }
+
+    const user = await userRepository.getUserByEmail(email);
+
+    if (!user) {
+        throw createError('Invalid user credentials.', 401);
+    }
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+        throw createError('Invalid user credentials.', 401);
+    }
+
+    await tokenRepository.deleteTokenByUserId(user._id);
+
+    const { accessToken, refreshToken } = tokenService.generateTokens(user);
+
+    await tokenRepository.createToken(user._id, refreshToken);
+
+    return { user, accessToken, refreshToken };
+};
+
 module.exports = {
-    registerService,
+    register,
+    login,
 };
