@@ -33,6 +33,8 @@ const register = async (username, email, password) => {
 
     await tokenRepository.createToken(newUser._id, refreshToken);
 
+    newUser.password = undefined;
+
     return { newUser, accessToken, refreshToken };
 };
 
@@ -59,10 +61,17 @@ const login = async (email, password) => {
 
     await tokenRepository.createToken(user._id, refreshToken);
 
+    user.password = undefined;
+
     return { user, accessToken, refreshToken };
+};
+
+const logout = async (token) => {
+    return await tokenRepository.deleteToken(token);
 };
 
 module.exports = {
     register,
     login,
+    logout,
 };

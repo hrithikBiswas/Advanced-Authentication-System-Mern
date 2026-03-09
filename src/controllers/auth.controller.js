@@ -62,7 +62,36 @@ const loginController = async (req, res, next) => {
     }
 };
 
+const logoutController = async (req, res, next) => {
+    try {
+        const { refreshToken } = req.cookies;
+
+        await authService.logout(refreshToken);
+
+        res.clearCookie('accessToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            path: '/',
+        });
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            path: '/',
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'User logged out successfully',
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     registerController,
     loginController,
+    logoutController,
 };

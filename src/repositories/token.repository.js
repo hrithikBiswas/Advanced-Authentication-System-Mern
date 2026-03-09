@@ -13,7 +13,12 @@ const deleteTokenByUserId = async (userId) => {
     return await Token.deleteOne({ user: userId });
 };
 
+const deleteToken = async (token) => {
+    return await Token.deleteOne({ token });
+};
+
 module.exports = {
     createToken,
     deleteTokenByUserId,
+    deleteToken,
 };
