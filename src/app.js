@@ -6,6 +6,7 @@ const errorMiddleware = require('./middlewares/error.middleware');
 
 // Import routes
 const authRouter = require('./routes/auth.route');
+const userRouter = require('./routes/user.route');
 
 const app = express();
 
@@ -28,7 +29,7 @@ app.get('/api/v0/health', (_req, res, next) => {
 });
 
 app.use('/api/v0/auth', authRouter);
-app.use('/api/v0/users', async (req, res) => {});
+app.use('/api/v0/user', userRouter);
 
 app.use(errorMiddleware);
 
